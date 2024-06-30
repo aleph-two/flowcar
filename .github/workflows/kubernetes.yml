@@ -1,0 +1,32 @@
+name: Kubernetes
+
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "k8s/**"
+  workflow_dispatch:
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "${{ secrets.SSH_SERVER }}" >> ~/.ssh/known_hosts
+
+      - name: Apply manifests
+        run: |
+          ssh "${{ secrets.SSH_USERNAME }}"@"${{ secrets.SSH_SERVER }}" << 'EOF'
+            cd /opt/flowcar
+            git pull --rebase origin main
+            bash apply.sh
+          EOF
