@@ -1,0 +1,17 @@
+.fullscreen {
+  min-height: 100vh !important;
+}
+
+.nav-item.dropdown .dropdown-item:active {
+  background-color: var(--bs-light) !important;
+}
+
+.ratio-9x16 {
+  --bs-aspect-ratio: 177.7777777778%;
+}
+
+@media (min-width: 992px) {
+  .conditional-shadow {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  }
+}
